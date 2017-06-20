@@ -42,14 +42,9 @@ final case class WorldView(
   time: ZonedDateTime
 )
 
-@module trait Deps {
+@module @debug trait DynAgents {
   val d: Drone
   val m: Machines
-}
-
-final class DynAgents[F[_]]()(implicit D: Deps[F]) {
-  import D._
-  type FS[A] = FreeS[F, A]
 
   def initial: FS[WorldView] =
     (d.getBacklog |@| d.getAgents |@| m.getManaged |@| m.getAlive |@| m.getTime).map {
